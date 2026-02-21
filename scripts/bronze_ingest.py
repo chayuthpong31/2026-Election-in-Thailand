@@ -79,7 +79,7 @@ def bronze_ingest():
         df = pd.DataFrame(data)
 
         # df.to_csv(BRONZE_DIR / "bronze_stats_cons.csv",index=False, encoding='utf-8-sig')
-        df.to_csv("/opt/airflow/data/bronze/bronze_stats_cons.csv")
+        df.to_csv("/opt/airflow/data/bronze/bronze_stats_cons.csv", index=False, encoding='utf-8-sig')
         logger.info("Extract stats_cons successfull ✅")
 
         # ======================= Extract stats_party data ==========================================
