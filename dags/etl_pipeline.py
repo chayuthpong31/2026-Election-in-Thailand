@@ -13,6 +13,7 @@ if str(AIRFLOW_HOME) not in sys.path:
 
 # import pipeline
 from scripts.bronze_ingest import bronze_ingest
+from scripts.silver_transform import silver_transform
 
 default_args = {
     "owner":"chayuthpong",
@@ -33,4 +34,9 @@ with DAG(
         python_callable = bronze_ingest
     )
 
-    bronze
+    silver = PythonOperator(
+        task_id = "silver_transform",
+        python_callable = silver_transform
+    )
+
+    bronze >> silver
