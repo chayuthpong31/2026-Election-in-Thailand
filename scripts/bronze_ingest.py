@@ -1,7 +1,6 @@
 from pyspark.sql import SparkSession
 import requests
 import pandas as pd
-from pathlib import Path
 import logging
 
 # Create logger
