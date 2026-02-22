@@ -23,7 +23,7 @@ def bronze_ingest():
         data = raw_data["province"]
         df = pd.DataFrame(data)
 
-        df.to_csv("/opt/airflow/data/bronze/bronze_info_province.csv", index=False, encoding='utf-8-sig')
+        df.to_csv("/data/bronze/bronze_info_province.csv", index=False, encoding='utf-8-sig')
         logger.info("Extract info_province successfull ✅")
 
         # ======================= Extract info_constituency data ==========================================
@@ -33,7 +33,7 @@ def bronze_ingest():
         df = pd.DataFrame(raw_data)
         df_zone_exploded = df.explode('zone')
 
-        df_zone_exploded.to_csv("/opt/airflow/data/bronze/bronze_info_constituency.csv", index=False, encoding='utf-8-sig')
+        df_zone_exploded.to_csv("/data/bronze/bronze_info_constituency.csv", index=False, encoding='utf-8-sig')
         logger.info("Extract info_constituency successfull ✅")
 
         # ======================= Extract info_party_overview data ==========================================
@@ -42,7 +42,7 @@ def bronze_ingest():
 
         df = pd.DataFrame(raw_data)
 
-        df.to_csv("/opt/airflow/data/bronze/bronze_info_party_overview.csv", index=False, encoding='utf-8-sig')
+        df.to_csv("/data/bronze/bronze_info_party_overview.csv", index=False, encoding='utf-8-sig')
         logger.info("Extract info_party_overview successfull ✅")
 
         # ======================= Extract info_mp_candidate data ==========================================
@@ -51,7 +51,7 @@ def bronze_ingest():
 
         df = pd.DataFrame(raw_data)
 
-        df.to_csv("/opt/airflow/data/bronze/bronze_info_mp_candidate.csv", index=False, encoding='utf-8-sig')
+        df.to_csv("/data/bronze/bronze_info_mp_candidate.csv", index=False, encoding='utf-8-sig')
         logger.info("Extract info_mp_candidate successfull ✅")
 
         # ======================= Extract info_party_candidate data ==========================================
@@ -63,7 +63,7 @@ def bronze_ingest():
         candidates_info = df_exploded['party_list_candidates'].apply(pd.Series)
         df_final = pd.concat([df_exploded['party_no'], candidates_info], axis=1)
 
-        df_final.to_csv("/opt/airflow/data/bronze/bronze_info_party_candidate.csv", index=False, encoding='utf-8-sig')
+        df_final.to_csv("/data/bronze/bronze_info_party_candidate.csv", index=False, encoding='utf-8-sig')
         logger.info("Extract info_party_candidate successfull ✅")
 
         # ======================= Extract stats_cons data ==========================================
@@ -101,16 +101,16 @@ def bronze_ingest():
         ).rename(columns={'constituencies.cons_id': 'cons_id'})
 
         
-        df_prov_summary.to_csv("/opt/airflow/data/bronze/bronze_province_summary.csv", index=False)
+        df_prov_summary.to_csv("/data/bronze/bronze_province_summary.csv", index=False)
         logger.info("Extract province_summary successfull ✅")
 
-        df_prov_party.to_csv("/opt/airflow/data/bronze/bronze_province_party_results.csv", index=False)
+        df_prov_party.to_csv("/data/bronze/bronze_province_party_results.csv", index=False)
         logger.info("Extract province_party_results successfull ✅")
 
-        df_district_candidates.to_csv("/opt/airflow/data/bronze/bronze_district_candidates_results.csv", index=False)
+        df_district_candidates.to_csv("/data/bronze/bronze_district_candidates_results.csv", index=False)
         logger.info("Extract district_candidates_results successfull ✅")
 
-        df_district_party.to_csv("/opt/airflow/data/bronze/bronze_district_party_results.csv", index=False)
+        df_district_party.to_csv("/data/bronze/bronze_district_party_results.csv", index=False)
         logger.info("Extract district_party_results successfull ✅")
 
         # ======================= Extract stats_party data ==========================================
@@ -120,7 +120,7 @@ def bronze_ingest():
 
         df_party = pd.DataFrame(data).drop(columns=['candidates'], errors='ignore')
 
-        df_party.to_csv("/opt/airflow/data/bronze/bronze_party_vote_summary.csv", index=False, encoding='utf-8-sig')
+        df_party.to_csv("/data/bronze/bronze_party_vote_summary.csv", index=False, encoding='utf-8-sig')
         logger.info("Extract party_vote_summary successfull ✅")
 
         data_with_candidates = [
@@ -134,7 +134,7 @@ def bronze_ingest():
                 record_path=['candidates']
             )
             
-            df_candidates.to_csv("/opt/airflow/data/bronze/bronze_candidate_votes_detailed.csv", index=False, encoding='utf-8-sig')
+            df_candidates.to_csv("/data/bronze/bronze_candidate_votes_detailed.csv", index=False, encoding='utf-8-sig')
             logger.info("Extract candidate_votes_detailed successfull ✅")
         else:
             pass
