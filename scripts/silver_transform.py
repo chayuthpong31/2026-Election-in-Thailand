@@ -32,7 +32,7 @@ def silver_transform():
     # drop unused column
     province_df = province_df.drop("eng")
 
-    province_df.toPandas().to_csv(BRONZE_PATH + "info_province.csv", index=False, encoding='utf-8-sig')
+    province_df.toPandas().to_csv(SILVER_PATH + "info_province.csv", index=False, encoding='utf-8-sig')
     logger.info("Transform info_province successfull ✅")
 
     # ======================================================================================
@@ -95,7 +95,8 @@ def silver_transform():
     with open(file_path, "r", encoding="utf-8") as f:
         raw_json_data = json.load(f)
 
-    df = spark.createDataFrame(raw_json_data)
+    json_rdd = spark.sparkContext.parallelize([json.dumps(record) for record in raw_json_data])
+    df = spark.read.json(json_rdd)
 
     df_final = df.withColumn("candidate", F.explode("party_list_candidates")) \
                 .select(
@@ -141,14 +142,15 @@ def silver_transform():
     logger.info("All Extract & Transform process successful ✅")
     # ======================================================================================
 
-    # ======================= Extract stats_party data ==========================================
-    file_path = BRONZE_PATH + "info_party_candidate.json"
+    # ======================= Transform stats_party data ==========================================
+    file_path = BRONZE_PATH + "stats_party.json"
     with open(file_path, "r", encoding="utf-8") as f:
         raw_json_data = json.load(f)
 
     data = raw_json_data["result_party"]
 
-    df_raw = spark.createDataFrame(data)
+    json_rdd = spark.sparkContext.parallelize([json.dumps(record) for record in data])
+    df_raw = spark.read.json(json_rdd)
 
     df_party = df_raw.drop("candidates", "party_list_count")
 

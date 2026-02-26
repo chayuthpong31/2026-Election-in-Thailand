@@ -20,12 +20,12 @@ def gold_aggregate():
     logger.info("Start Reading Files...")
     province_df = spark.read.csv(SILVER_PATH + "info_province.csv", header=True, inferSchema=True)
     constituency_df = spark.read.csv(SILVER_PATH + "info_constituency.csv", header=True, inferSchema=True)
-    mp_candidate_df = spark.read.csv(SILVER_PATH + "info_mp_candidate.csv", header=True, inferSchema=True)
-    party_df = spark.read.csv(SILVER_PATH + "info_party_overview.csv", header=True, inferSchema=True)
-    party_candidate_df = spark.read.csv(SILVER_PATH + "info_party_candidate.csv", header=True, inferSchema=True)
+    mp_candidate_df = spark.read.csv(SILVER_PATH + "mp_candidate.csv", header=True, inferSchema=True)
+    party_df = spark.read.csv(SILVER_PATH + "party.csv", header=True, inferSchema=True)
+    party_candidate_df = spark.read.csv(SILVER_PATH + "party_candidate.csv", header=True, inferSchema=True)
     province_summary_df = spark.read.csv(SILVER_PATH + "province_summary.csv", header=True, inferSchema=True)
-    district_candidates_result_df = spark.read.csv(SILVER_PATH + "district_candidates_results.csv", header=True, inferSchema=True)
-    district_party_result_df = spark.read.csv(SILVER_PATH + "district_party_results.csv", header=True, inferSchema=True)
+    district_candidates_result_df = spark.read.csv(SILVER_PATH + "district_candidates_result.csv", header=True, inferSchema=True)
+    district_party_result_df = spark.read.csv(SILVER_PATH + "district_party_result.csv", header=True, inferSchema=True)
 
     # ======================================================================================
 
