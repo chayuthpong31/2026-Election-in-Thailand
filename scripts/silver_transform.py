@@ -47,7 +47,7 @@ def silver_transform():
     constituency_df_zone_exploded = constituency_df.withColumn("zone", F.explode("zone"))
 
     # Cast column type
-    constituency_df = constituency_df.withColumn("registered_vote", constituency_df["registered_vote"].cast(IntegerType()))
+    constituency_df_zone_exploded = constituency_df_zone_exploded.withColumn("registered_vote", constituency_df_zone_exploded["registered_vote"].cast(IntegerType()))
     
     constituency_df_zone_exploded.toPandas().to_csv(SILVER_PATH + "info_constituency.csv", index=False, encoding='utf-8-sig')
     logger.info("Transform info_constituency successfull ✅")

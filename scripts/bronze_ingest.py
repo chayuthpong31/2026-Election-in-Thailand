@@ -1,6 +1,4 @@
-from pyspark.sql import SparkSession
 import requests
-import pandas as pd
 import logging
 import json
 from pathlib import Path
@@ -8,13 +6,7 @@ from pathlib import Path
 # Create logger
 logger = logging.getLogger(__name__)
 
-def bronze_ingest():
-    # Get Spark Cluster 
-    spark = SparkSession.builder \
-        .appName("Election2026-ETL") \
-        .master("spark://spark-master:7077") \
-        .config("spark.jars.packages", "org.postgresql:postgresql:42.6.0") \
-        .getOrCreate()
+def bronze_ingest(): 
 
     BRONZE_PATH = "/data/bronze/bronze_"
 
