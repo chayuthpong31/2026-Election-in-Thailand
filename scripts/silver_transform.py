@@ -30,7 +30,7 @@ def silver_transform():
     province_df = spark.createDataFrame(data)
 
     # drop unused column
-    province_df = province_df.drop("eng")
+    province_df = province_df.drop("eng", "total_registered_vote", "total_vote_stations")
 
     province_df.toPandas().to_csv(SILVER_PATH + "info_province.csv", index=False, encoding='utf-8-sig')
     logger.info("Transform info_province successfull ✅")
@@ -70,6 +70,9 @@ def silver_transform():
                         .withColumnRenamed("mp_app_no","mp_candidate_no")
                         .withColumnRenamed("mp_app_party_id","mp_candidate_party_id")
                         .withColumnRenamed("mp_app_name", "mp_candidate_name"))
+
+    # Drop null mp_candidate_party_id
+    mp_candidate_df = mp_candidate_df.dropna(subset=["mp_candidate_party_id"])
     
     mp_candidate_df.toPandas().to_csv(SILVER_PATH + "mp_candidate.csv", index=False) 
     logger.info("Transform info_mp_candidate successfull ✅")
@@ -104,6 +107,9 @@ def silver_transform():
                     "candidate.*"  
                 )
 
+    # Drop null 
+    df_final = df_final.dropna(subset=["party_no","list_no"])
+
     df_final.toPandas().to_csv(SILVER_PATH + "party_candidate.csv", index=False, encoding='utf-8-sig')
 
     logger.info("Transform info_party_candidate successfull ✅")
@@ -134,6 +140,12 @@ def silver_transform():
         .select("prov_id", "cons_id", "p_res.*") \
         .withColumnRenamed("party_id", "party_id")
 
+    # Drop null value
+    df_district_candidates = df_district_candidates.dropna(subset=["prov_id","cons_id","mp_candidate_id","party_id"])
+    df_district_party = df_district_party.dropna(subset=["prov_id","cons_id","party_id"])
+    df_district_party = df_district_party.filter(F.col("cons_id") != "BKK_0")
+
+    # Save files
     df_prov_summary.toPandas().to_csv(SILVER_PATH + "province_summary.csv", index=False, encoding='utf-8-sig')
     df_prov_party.toPandas().to_csv(SILVER_PATH + "province_party_result.csv", index=False, encoding='utf-8-sig')
     df_district_candidates.toPandas().to_csv(SILVER_PATH + "district_candidates_result.csv", index=False, encoding='utf-8-sig')

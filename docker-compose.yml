@@ -1,6 +1,8 @@
 x-airflow-common:
   &airflow-common
   build: .
+  networks:
+      - default
   environment: &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: SequentialExecutor
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
@@ -28,8 +30,16 @@ services:
 
   data-destination:
     image: postgres:15
-    environment: [POSTGRES_USER=myuser, POSTGRES_PASSWORD=mypassword, POSTGRES_DB=target_db]
+    environment: 
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASS}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports: ["5433:5432"]
+    networks:
+      - default
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data
 
   airflow-webserver:
     <<: *airflow-common
@@ -92,3 +102,6 @@ services:
 networks:
   default:
     name: airflow-spark-network
+
+volumes:
+  postgres_data:

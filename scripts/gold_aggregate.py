@@ -30,8 +30,9 @@ def gold_aggregate():
     # ======================================================================================
 
     # ================================ Create dim and fact table ==================================
-    dim_province = province_df.join(province_summary_df, province_df.prov_id == province_summary_df.prov_id, 'left')
-    dim_constituency = constituency_df
+    dim_province = province_df.join(province_summary_df, "prov_id", 'left')
+    dim_constituency = constituency_df.drop('zone').drop_duplicates()
+    dim_zone = constituency_df.select("cons_id","zone")
     dim_party = party_df
     dim_mp_candidate = mp_candidate_df
     dim_party_candidate = party_candidate_df
@@ -43,6 +44,7 @@ def gold_aggregate():
     # ================================ Save files ==================================
     dim_province.toPandas().to_csv(GOLD_PATH + "dim_province.csv", index=False, encoding='utf-8-sig')
     dim_constituency.toPandas().to_csv(GOLD_PATH + "dim_constituency.csv", index=False, encoding='utf-8-sig')
+    dim_zone.toPandas().to_csv(GOLD_PATH + "dim_zone.csv", index=False, encoding='utf-8-sig')
     dim_party.toPandas().to_csv(GOLD_PATH + "dim_party.csv", index=False, encoding='utf-8-sig')
     dim_mp_candidate.toPandas().to_csv(GOLD_PATH + "dim_mp_candidate.csv", index=False, encoding='utf-8-sig')
     dim_party_candidate.toPandas().to_csv(GOLD_PATH + "dim_party_candidate.csv", index=False, encoding='utf-8-sig')
